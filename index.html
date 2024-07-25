@@ -12,13 +12,40 @@
         </div>
     </div> -->
 
-<!DOCTYPE html>
-<html>
+
+
+    <!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>FW01.pdf</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PDF Viewer</title>
+<style>
+    #pdfContainer {
+        padding: 20px;
+    }
+
+    .result {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        padding-top: 56.25%; /* 16:9 Aspect Ratio (divide 9 by 16 = 0.5625) */
+    }
+
+    .result iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+</style>
 </head>
 <body>
-    <embed src="./FW01.pdf" type="application/pdf" width="100%" height="100%">
+<div id="pdfContainer">    
+    <div class="result">
+        <iframe src="./FW01.pdf" width="100%" height="100%" frameborder="0"></iframe>
+    </div>
+</div>
 </body>
 </html>
