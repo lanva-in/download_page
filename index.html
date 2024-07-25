@@ -1,14 +1,44 @@
-
-<style type="text/css">
-#pdfContainer  textarea {
-    padding-top : 20px;
-    margin-bottom : 10px;
-    width : 600px;
-}
-</style>
-
-<div id="pdfContainer">    
-    <div class="result">
-        <embed src="./FW01.pdf" width="100%" height="100%" />
-    </div>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>FW01.pdf</title>
+</head>
+<body>
+ 
+<div>
+  <canvas id="the-canvas"></canvas>
 </div>
+ 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.js"></script>
+<!--<script src="./pdf.js"></script>-->
+<script>
+  // This is a simple example of using PDF.js to show a PDF.
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.js';
+ 
+  const url = './FW01.pdf'; // Specify the URL of your PDF file here.
+  const canvas = document.getElementById('the-canvas');
+  const context = canvas.getContext('2d');
+ 
+  // Loaded via <script> tag, create shortcut to access PDF.js exports.
+  pdfjsLib.getDocument(url).promise.then(pdfDoc => {
+    // Fetch the first page of the PDF.
+    pdfDoc.getPage(1).then(page => {
+      // Get viewport (dimensions) of the page.
+      const viewport = page.getViewport({ scale: 1.5 });
+      canvas.height = viewport.height;
+      canvas.width = viewport.width;
+ 
+      // Render the page into the canvas context.
+      const renderContext = {
+        canvasContext: context,
+        viewport: viewport
+      };
+      page.render(renderContext).promise.then(() => {
+        console.log('Page rendered!');
+      });
+    });
+  });
+</script>
+ 
+</body>
+</html>
