@@ -1,44 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
   <title>FW01.pdf</title>
 </head>
 <body>
- 
-<div>
-  <canvas id="the-canvas"></canvas>
-</div>
- 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.js"></script>
-<!--<script src="./pdf.js"></script>-->
-<script>
-  // This is a simple example of using PDF.js to show a PDF.
-  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.js';
- 
-  const url = './FW01.pdf'; // Specify the URL of your PDF file here.
-  const canvas = document.getElementById('the-canvas');
-  const context = canvas.getContext('2d');
- 
-  // Loaded via <script> tag, create shortcut to access PDF.js exports.
-  pdfjsLib.getDocument(url).promise.then(pdfDoc => {
-    // Fetch the first page of the PDF.
-    pdfDoc.getPage(1).then(page => {
-      // Get viewport (dimensions) of the page.
-      const viewport = page.getViewport({ scale: 1.5 });
-      canvas.height = viewport.height;
-      canvas.width = viewport.width;
- 
-      // Render the page into the canvas context.
-      const renderContext = {
-        canvasContext: context,
-        viewport: viewport
-      };
-      page.render(renderContext).promise.then(() => {
-        console.log('Page rendered!');
-      });
-    });
-  });
+<canvas id="the-canvas" style="border: 1px solid black; direction: ltr;"></canvas>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.1.392/pdf.min.mjs" type="module"></script>
+<script id="script" type="module">
+  // url是pdf文件的链接地址
+  const url = './FW01.pdf'
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.1.392/pdf.worker.mjs'
+  const loadingTask = pdfjsLib.getDocument(url)
+  const pdf = await loadingTask.promise
+  const page = await pdf.getPage(1)
+  const scale = 1.5
+  const viewport = page.getViewport({ scale })
+  const outputScale = window.devicePixelRatio || 1
+  const canvas = document.getElementById("the-canvas")
+  const context = canvas.getContext("2d")
+  canvas.width = Math.floor(viewport.width * outputScale)
+  canvas.height = Math.floor(viewport.height * outputScale)
+  canvas.style.width = Math.floor(viewport.width) + "px"
+  canvas.style.height = Math.floor(viewport.height) + "px"
+  const transform = outputScale !== 1
+    ? [outputScale, 0, 0, outputScale, 0, 0]
+    : null
+  const renderContext = {
+    canvasContext: context,
+    transform,
+    viewport,
+  }
+  page.render(renderContext)
 </script>
- 
+
+<pre id="code"></pre>
 </body>
 </html>
